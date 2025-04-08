@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.UserMapper">
+
+    <select id="countByUsernameAndPassword"  parameterType="com.example.demo.dto.User" resultType="int">
+        SELECT COUNT(*)
+        FROM USERS
+        WHERE USERNAME = #{username}
+          AND PASSWORD = #{password}
+    </select>
+
+    <insert id="insertUser" parameterType="com.example.demo.dto.SignupUser">
+        INSERT INTO USERS (USERNAME, PASSWORD, EMAIL, ADDRESS, PHONE)
+        VALUES (#{username}, #{password}, #{email}, #{address}, #{phone})
+    </insert>
+</mapper>

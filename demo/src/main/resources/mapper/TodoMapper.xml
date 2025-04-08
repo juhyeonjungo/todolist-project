@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.TodoMapper">
+
+    <select id="todoList" resultType="com.example.demo.dto.Todo">
+        SELECT *
+        FROM TODOS
+        WHERE USER_ID = (SELECT ID FROM USERS WHERE USERNAME = #{username})
+    </select>
+
+    <insert id="insertTodo">
+        INSERT INTO todos (ID, USER_ID, CONTENT, COMPLETED, CREATED_AT)
+        VALUES (
+                   TODOS_SEQ.NEXTVAL,
+            (SELECT ID FROM USERS WHERE USERNAME = #{username}),
+            #{content},
+            'N',
+            SYSDATE
+            )
+    </insert>
+
+    <update id="toggle" parameterType="map">
+        UPDATE todos
+        SET completed = CASE
+                            WHEN completed = 'N' THEN 'Y'
+                            WHEN completed = 'Y' THEN 'N'
+            END
+        WHERE user_id = (SELECT id FROM users WHERE username = #{username})
+          AND id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM TODOS
+        WHERE USER_ID = (SELECT ID FROM USERS WHERE USERNAME = #{username})
+          AND ID = #{id}
+    </delete>
+</mapper>
